@@ -1,0 +1,27 @@
+{
+  "name": "codeceptjs-dbhelper",
+  "version": "1.0.0",
+  "description": "Database helper for CodeceptJS that uses database-js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thiagodp/codeceptjs-dbhelper.git"
+  },
+  "keywords": [
+    "codeceptjs",
+    "database",
+    "database-js"
+  ],
+  "author": "thiagodp",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thiagodp/codeceptjs-dbhelper/issues"
+  },
+  "homepage": "https://github.com/thiagodp/codeceptjs-dbhelper#readme",
+  "dependencies": {
+    "database-js": "^3.0.3"
+  }
+}
