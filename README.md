@@ -62,7 +62,7 @@ In your `codecept.json`, include **DbHelper** in the property **helpers** :
   "helpers": {
     ...
     "DbHelper": {
-      "require": "node_modules/codeceptjs-dbhelper"
+      "require": "./node_modules/codeceptjs-dbhelper"
     }
   },
   ...
