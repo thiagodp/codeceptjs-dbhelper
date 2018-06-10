@@ -173,6 +173,10 @@ async query( key, command, ... params );
 async run( key, command, ... params );
 ```
 
+## See also
+
+[codeceptjs-cmdhelper](https://github.com/thiagodp/codeceptjs-cmdhelper) - Execute commands in the console/terminal
+
 
 ## License
 
