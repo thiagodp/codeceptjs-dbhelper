@@ -78,7 +78,7 @@ The object `I` of your tests and events will have access to new methods. [See th
 ```js
 BeforeSuite( async( I ) => {
     // The first parameter is the key that will hold a reference to the db
-    I.connect( "testdb", "mysql:///root:mypassword@localhost:3306/testdb" );
+    I.connect( "testdb", "mysql://root:mypassword@localhost:3306/testdb" );
 } );
 
 AfterSuite( async( I ) => {
