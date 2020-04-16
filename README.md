@@ -1,4 +1,8 @@
 # codeceptjs-dbhelper
+
+[![npm version](https://badge.fury.io/js/codeceptjs-dbhelper.svg)](https://badge.fury.io/js/codeceptjs-dbhelper)
+[![Downloads](https://img.shields.io/npm/dt/codeceptjs-dbhelper.svg)](https://npmjs.org/package/codeceptjs-dbhelper)
+
 > Let your CodeceptJS tests talk to databases
 
 This is a [Helper](https://codecept.io/helpers/) for [CodeceptJS](https://codecept.io/) that allows you to execute queries or commands to databases using [database-js](https://github.com/mlaanderson/database-js). That is, your tests written for CodeceptJS now will be able to access databases easily. **It is especially useful for preparing databases before/after executing test cases.**
