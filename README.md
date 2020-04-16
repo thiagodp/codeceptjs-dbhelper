@@ -9,6 +9,8 @@ This is a [Helper](https://codecept.io/helpers/) for [CodeceptJS](https://codece
 
 ## Install
 
+📌 Currently, this helper is compatible with CodeceptJS `1.2.1` and should work with any version `1.x`. However, it was not tested yet with versions `2.x`.
+
 ```bash
 npm install --save-dev codeceptjs-dbhelper
 ```
@@ -82,7 +84,7 @@ The object `I` of your tests and events will have access to new methods. [See th
 ```js
 BeforeSuite( async( I ) => {
     // The first parameter is the key that will hold a reference to the db
-    I.connect( "testdb", "mysql:///root:mypassword@localhost:3306/testdb" );
+    I.connect( "testdb", "mysql://root:mypassword@localhost:3306/testdb" );
 } );
 
 AfterSuite( async( I ) => {
@@ -176,6 +178,10 @@ async query( key, command, ... params );
  */
 async run( key, command, ... params );
 ```
+
+## See also
+
+[codeceptjs-cmdhelper](https://github.com/thiagodp/codeceptjs-cmdhelper) - Execute commands in the console/terminal
 
 
 ## License
