@@ -22,6 +22,6 @@
   },
   "homepage": "https://github.com/thiagodp/codeceptjs-dbhelper#readme",
   "dependencies": {
-    "database-js": "^3.0.3"
+    "database-js": "^3.0.10"
   }
 }
