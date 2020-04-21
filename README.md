@@ -9,10 +9,8 @@ This is a [Helper](https://codecept.io/helpers/) for [CodeceptJS](https://codece
 
 ## Install
 
-📌 Currently, this helper is compatible with CodeceptJS `1.2.1` and should work with any version `1.x`. However, it was not tested yet with versions `2.x`.
-
 ```bash
-npm install --save-dev codeceptjs-dbhelper
+npm install --save codeceptjs-dbhelper
 ```
 
 👉 You will also have to install the drivers of [database-js](https://github.com/mlaanderson/database-js) for the desired databases. For instance, whether you want to access a JSON file, just install the JSON driver.
