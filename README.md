@@ -9,55 +9,33 @@ This is a [Helper](https://codecept.io/helpers/) for [CodeceptJS](https://codece
 
 ## Install
 
+**_Step 1 of 2_: Install the helper**
+
 ```bash
 npm install --save codeceptjs-dbhelper
 ```
 
-👉 You will also have to install the drivers of [database-js](https://github.com/mlaanderson/database-js) for the desired databases. For instance, whether you want to access a JSON file, just install the JSON driver.
+**_Step 2 of 2_: Install the driver for the database you need to use**
 
-### Available drivers
+| Driver (wrapper) | Note | Installation command |
+| ---------------- | ---- | -------------------- |
+| [ActiveX Data Objects](//github.com/mlaanderson/database-js-adodb) | *Windows only* | `npm i database-js-adodb` |
+| [CSV files](//github.com/mlaanderson/database-js-csv) | | `npm i database-js-csv` |
+| [Excel files](//github.com/mlaanderson/database-js-xlsx) | | `npm i database-js-xlsx` |
+| [Firebase](//github.com/mlaanderson/database-js-firebase) | | `npm i database-js-firebase` |
+| [INI files](//github.com/mlaanderson/database-js-ini) | | `npm i database-js-ini` |
+| [JSON files](//github.com/thiagodp/database-js-json) | | `npm i database-js-json` |
+| [MySQL](//github.com/mlaanderson/database-js-mysql) | | `npm i database-js-mysql` |
+| [MS SQL Server](https://github.com/thiagodp/database-js-mssql) | | `npm i database-js-mssql` |
+| [PostgreSQL](//github.com/mlaanderson/database-js-postgres) | | `npm i database-js-postgres` |
+| [SQLite](//github.com/mlaanderson/database-js-sqlite) | | `npm i database-js-sqlite` |
 
-*Only install those you need*
-
-- Access databases or SQL Server databases
-    ```bash
-    npm install --save-dev database-js-adodb
-    ```
-- CSV files
-    ```bash
-    npm install --save-dev database-js-csv
-    ```
-- Excel files
-    ```bash
-    npm install --save-dev database-js-xlsx
-    ```
-- INI files
-    ```bash
-    npm install --save-dev database-js-ini
-    ```
-- Firebase databases
-    ```bash
-    npm install --save-dev database-js-firebase
-    ```
-- JSON files
-    ```bash
-    npm install --save-dev database-js-json
-    ```
-- MySQL databases
-    ```bash
-    npm install --save-dev database-js-mysql
-    ```
-- PostgreSQL databases
-    ```bash
-    npm install --save-dev database-js-postgres
-    ```
-- SQLite databases
-    ```bash
-    npm install --save-dev database-js-sqlite
-    ```
+See [database-js](https://github.com/mlaanderson/database-js) for the full list of available drivers.
 
 
-## How to configure it
+## Usage
+
+### Configuration in CodeceptJS
 
 In your `codecept.json`, include **DbHelper** in the property **helpers** :
 
@@ -71,13 +49,11 @@ In your `codecept.json`, include **DbHelper** in the property **helpers** :
   },
   ...
 ```
-
-## How to use it
+### Examples
 
 The object `I` of your tests and events will have access to new methods. [See the API](#api).
 
-
-### Example 1
+#### Example 1
 
 ```js
 BeforeSuite( async( I ) => {
@@ -108,7 +84,7 @@ await I.run( "testdb", "INSERT INTO user ( username, password ) VALUES ( ?, ? )"
 // ... your scenarios ...
 ```
 
-### Example 2
+#### Example 2
 
 ```js
 Feature( 'Foo' );
