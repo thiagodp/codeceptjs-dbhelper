@@ -39,9 +39,7 @@ See [database-js](https://github.com/mlaanderson/database-js) for the full list 
 
 ## Configure
 
-### Configuration in CodeceptJS
-
-In your `codecept.json`, include **DbHelper** in the property **helpers** :
+In your CodeceptJS configuration file (e.g., `codecept.conf.js`, `codecept.json`), include **DbHelper** in the property **helpers** :
 
 ```js
   ...
@@ -59,7 +57,7 @@ In your `codecept.json`, include **DbHelper** in the property **helpers** :
 
 ### Syntax differences between CodeceptJS 2 and CodeceptJS 3
 
-In CodeceptJS 2, your callbacks receive an `I` argument:
+In CodeceptJS 2, your callbacks receive `I` as argument:
 
 ```javascript
 Scenario('test something', async ( I ) => {   // CodeceptJS 2 notation
@@ -81,24 +79,26 @@ See the [CodeceptJS docs](https://github.com/codeceptjs/CodeceptJS/wiki/Upgradin
 
 > The following examples are written with **CodeceptJS 3**.
 
-The object `I` of your tests and events now has to the [methods described in the API](#api).
+Now the object `I` (of your callbacks) has [new methods](#api).
 
 #### Example 1
 
 ```js
 BeforeSuite( async( { I } ) => {
-    // The first parameter is the key that will hold a reference to the db
+    // Connects to a database
+    // The first parameter is the key that will hold a reference to the database
     I.connect( "testdb", "mysql://root:mypassword@localhost:3306/testdb" );
 } );
 
 AfterSuite( async( { I } ) => {
-    await I.removeConnection( "testdb" ); // also disconnects
+    // Disconnects and removes the reference to the database
+    await I.removeConnection( "testdb" );
 } );
 
 
 Before( async( { I } ) => {
 
-  // Deleting all the records from the table 'user'
+  // Deletes all the records from the table 'user'
   await I.run( "testdb", "DELETE FROM user" );
 
   // Inserting some users
@@ -121,12 +121,12 @@ Feature( 'Foo' );
 Scenario( 'Bar', async( { I } ) => {
 
     // Queries a user from the database
-    const results = await I.query( "testdb", "SELECT * FROM user WHERE username = ?", "bob" );
-    const bob = results[ 0 ];
+    const results = await I.query( "testdb", "SELECT username, password FROM user WHERE username = ?", "bob" );
+    const user = results[ 0 ]; // object in the first row
 
     I.amOnPage( '/login' );
-    I.fillField( '#username', bob.username );
-    I.fillField( '#password', bob.password );
+    I.fillField( '#username', user.username ); // bob
+    I.fillField( '#password', user.password ); // 654321
     I.click( '#ok' );
     I.see( 'Welcome' );
 } );
@@ -137,47 +137,47 @@ Scenario( 'Bar', async( { I } ) => {
 
 ```js
 /**
- * Connects to a database by the given connection data.
+ * Connects to the database described by the given connection string.
  *
- * @param {string|number} key Key used to identify the database
- * @param {string|object} conn JDBC-like connection string or a connection object accepted by `database-js`.
- * @param {object|undefined} driver Driver object, used by `database-js` (optional).
+ * @param {string|number}    key    Identification for using in other commands.
+ * @param {string|object}    conn   JDBC-like connection string or a connection object accepted by `database-js`.
+ * @param {object|undefined} driver [OPTIONAL] Driver object, used by `database-js`.
  */
 connect( key, conn, driver );
 
 /**
- * Disconnects from a given database by its key.
+ * Disconnects from the database identified by the given key.
  *
- * @param {string|number} key Key used to identify the database
+ * @param {string|number} key Database identification key set in connect()
  */
 async disconnect( key );
 
 /**
- * Disconnects and removes a database connection by its key.
+ * Disconnects and removes the database connection identified by the given key.
  *
- * @param {string|number} key Key used to identify the database
+ * @param {string|number} key Database identification key set in connect()
  */
 async removeConnection( key );
 
 /**
- * Queries a database with the given key.
+ * Performs a query.
  *
- * @param {string|number} key Key used to identify the database
- * @param {string} command Query
- * @param {any[]} params Parameters of the query
+ * @param {string|number} key     Database identification key set in connect()
+ * @param {string}        command Query to run.
+ * @param {any[]}         params  [OPTIONAL] Query parameters
  *
- * @returns {Promise<any[]>} The results of the query.
+ * @returns {Promise<any[]>}      Query results.
  */
 async query( key, command, ... params );
 
 /**
- * Executes a command to the database with the given key.
+ * Executes a command.
  *
- * @param {string|number} key Key used to identify the database
- * @param {string} command Command to execute
- * @param {any[]} params Parameters of the command
+ * @param {string|number} key     Database identification key set in connect()
+ * @param {string}        command Command to run.
+ * @param {any[]}         params  [OPTIONAL] Command parameters
  *
- * @returns {Promise<any[]>}
+ * @returns {Promise<any[]>}      Command results.
  */
 async run( key, command, ... params );
 ```

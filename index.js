@@ -1,7 +1,7 @@
 let dbjs = require('database-js');
 
 /**
- * Database helper
+ * Database helper for CodeceptJS
  *
  * @author Thiago Delgado Pinto
  */
@@ -10,7 +10,7 @@ class DbHelper extends Helper {
     /**
      * Constructor
      *
-     * @param {object} config Configuration declared in the CodeceptJS configuration file.
+     * @param {object} config CodeceptJS configuration
      */
     constructor( config ) {
         super( config );
@@ -21,20 +21,20 @@ class DbHelper extends Helper {
     }
 
     /**
-     * Connects to a database by the given connection data.
+     * Connects to the database described by the given connection string.
      *
-     * @param {string|number} key Key used to identify the database
-     * @param {string|object} conn JDBC-like connection string or a connection object accepted by `database-js`.
-     * @param {object|undefined} driver Driver object, used by `database-js` (optional).
+     * @param {string|number}    key    Identification for using in other commands.
+     * @param {string|object}    conn   JDBC-like connection string or a connection object accepted by `database-js`.
+     * @param {object|undefined} driver [OPTIONAL] Driver object, used by `database-js`.
      */
     connect( key, conn, driver ) {
         return this.connectionMap[ key ] = this.createConnection( conn, driver );
     }
 
     /**
-     * Disconnects from a given database by its key.
+     * Disconnects from the database identified by the given key.
      *
-     * @param {string|number} key Key used to identify the database
+     * @param {string|number} key Database identification key set in connect()
      */
     async disconnect( key ) {
         let conn = this.connectionMap[ key ];
@@ -45,9 +45,9 @@ class DbHelper extends Helper {
     }
 
     /**
-     * Disconnects and removes a database connection by its key.
+     * Disconnects and removes the database connection identified by the given key.
      *
-     * @param {string|number} key Key used to identify the database
+     * @param {string|number} key Database identification key set in connect()
      */
     async removeConnection( key ) {
         if ( ! this.connectionMap[ key ] ) {
@@ -64,13 +64,13 @@ class DbHelper extends Helper {
     }
 
     /**
-     * Queries a database with the given key.
+     * Performs a query.
      *
-     * @param {string|number} key Key used to identify the database
-     * @param {string} command Query
-     * @param {any[]} params Parameters of the query
+     * @param {string|number} key     Database identification key set in connect()
+     * @param {string}        command Query to run.
+     * @param {any[]}         params  [OPTIONAL] Query parameters
      *
-     * @returns {Promise<any[]>} The results of the query.
+     * @returns {Promise<any[]>}      Query results.
      */
     async query( key, command, ... params ) {
         let conn = this.connectionMap[ key ];
@@ -85,13 +85,13 @@ class DbHelper extends Helper {
     }
 
     /**
-     * Executes a command to the database with the given key.
+     * Executes a command.
      *
-     * @param {string|number} key Key used to identify the database
-     * @param {string} command Command to execute
-     * @param {any[]} params Parameters of the command
+     * @param {string|number} key     Database identification key set in connect()
+     * @param {string}        command Command to run.
+     * @param {any[]}         params  [OPTIONAL] Command parameters
      *
-     * @returns {Promise<any[]>}
+     * @returns {Promise<any[]>}      Command results.
      */
     async run( key, command, ... params ) {
         let conn = this.connectionMap[ key ];
@@ -108,35 +108,35 @@ class DbHelper extends Helper {
     /**
      * Creates a database connection.
      *
-     * @param {string|object} conn JDBC-like connection string or a connection object accepted by `database-js`.
-     * @param {object|undefined} driver Driver object, used by `database-js` (optional).
+     * @param {string|object}       conn    JDBC-like connection string or a connection object accepted by `database-js`.
+     * @param {object|undefined}    driver  [OPTIONAL] Driver object, used by `database-js`.
      */
     createConnection( conn, driver ) {
         return new dbjs.Connection( conn, driver );
     }
 
     /**
-     * Checks whether there is a database with the given key.
+     * Checks if there is a database connection with the given key.
      *
-     * @param {string|number} key Key used to identify the database
+     * @param {string|number} key Database identification key set in connect()
      */
     hasConnection( key ) {
         return !! this.connectionMap[ key ];
     }
 
     /**
-     * Get the database connection with the given key.
+     * Gets the database connection with the given key.
      *
-     * @param {string|number} key Key used to identify the database
+     * @param {string|number} key Database identification key set in connect()
      */
     getConnection( key ) {
         return this.connectionMap[ key ];
     }
 
     /**
-     * Creates an error related to the case when the given key is not found.
+     * Creates an error that represents a database not found.
      *
-     * @param {string|number} key Key used to identify the database
+     * @param {string|number} key Database identification key
      */
     _keyNotFoundError( key ) {
         return new Error( 'Database not found with the key ' + key );
