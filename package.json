@@ -2,26 +2,37 @@
   "name": "codeceptjs-dbhelper",
   "version": "1.0.2",
   "description": "Database helper for CodeceptJS that uses database-js",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "homepage": "https://github.com/thiagodp/codeceptjs-dbhelper",
+  "author": "thiagodp",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thiagodp/codeceptjs-dbhelper.git"
+  },
+  "bugs": {
+    "url": "https://github.com/thiagodp/codeceptjs-dbhelper/issues"
   },
   "keywords": [
     "codeceptjs",
     "database",
     "database-js"
   ],
-  "author": "thiagodp",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/thiagodp/codeceptjs-dbhelper/issues"
+  "main": "index.js",
+  "scripts": {
+    "setup:v2": "cd codeceptjs_check/v2 && npm i && cd ../..",
+    "setup:v3": "cd codeceptjs_check/v3 && npm i && cd ../..",
+    "test": "mocha __tests__",
+    "test:v2": "cd codeceptjs_check/v2 && npx codeceptjs run",
+    "test:v3": "cd codeceptjs_check/v3 && npx codeceptjs run",
+    "test:all": "npm run test && npm run test:v2 && npm run test:v3",
+    "preversion": "npm run test"
   },
-  "homepage": "https://github.com/thiagodp/codeceptjs-dbhelper#readme",
   "dependencies": {
     "database-js": "^3.0.10"
+  },
+  "devDependencies": {
+    "codeceptjs": "^3.0.7",
+    "database-js-sqlite": "^1.3.0",
+    "mocha": "^8.4.0"
   }
 }

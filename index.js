@@ -1,4 +1,7 @@
-let dbjs = require('database-js');
+const dbjs = require('database-js');
+if ( ! Helper ) {
+    var Helper = require( 'codeceptjs/lib/helper' );
+}
 
 /**
  * Database helper for CodeceptJS

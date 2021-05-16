@@ -1,1 +1,6 @@
 node_modules
+output
+codeceptjs_check/v2/node_modules
+codeceptjs_check/v2/output
+codeceptjs_check/v3/node_modules
+codeceptjs_check/v3/output
