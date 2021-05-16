@@ -1,4 +1,4 @@
-let dbjs = require('database-js'); // npm install database-js --save-dev
+let dbjs = require('database-js');
 
 /**
  * Database helper

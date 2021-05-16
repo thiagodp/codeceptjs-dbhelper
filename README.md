@@ -7,33 +7,37 @@
 
 This is a [Helper](https://codecept.io/helpers/) for [CodeceptJS](https://codecept.io/) that allows you to execute queries or commands to databases using [database-js](https://github.com/mlaanderson/database-js). That is, your tests written for CodeceptJS now will be able to access databases easily. **It is especially useful for preparing databases before/after executing test cases.**
 
+👉 It works with **CodeceptJS 1, 2, and 3**.
+
 ## Install
 
-**_Step 1 of 2_: Install the helper**
+> You have to install the library and the desired database drivers
+
+Step 1 of 2: **Install the helper**
 
 ```bash
-npm install --save codeceptjs-dbhelper
+npm i -D codeceptjs-dbhelper
 ```
 
-**_Step 2 of 2_: Install the driver for the database you need to use**
+Step 2 of 2: **Install a database driver**
 
 | Driver (wrapper) | Note | Installation command |
 | ---------------- | ---- | -------------------- |
-| [ActiveX Data Objects](//github.com/mlaanderson/database-js-adodb) | *Windows only* | `npm i database-js-adodb` |
-| [CSV files](//github.com/mlaanderson/database-js-csv) | | `npm i database-js-csv` |
-| [Excel files](//github.com/mlaanderson/database-js-xlsx) | | `npm i database-js-xlsx` |
-| [Firebase](//github.com/mlaanderson/database-js-firebase) | | `npm i database-js-firebase` |
-| [INI files](//github.com/mlaanderson/database-js-ini) | | `npm i database-js-ini` |
-| [JSON files](//github.com/thiagodp/database-js-json) | | `npm i database-js-json` |
-| [MySQL](//github.com/mlaanderson/database-js-mysql) | | `npm i database-js-mysql` |
-| [MS SQL Server](https://github.com/thiagodp/database-js-mssql) | | `npm i database-js-mssql` |
-| [PostgreSQL](//github.com/mlaanderson/database-js-postgres) | | `npm i database-js-postgres` |
-| [SQLite](//github.com/mlaanderson/database-js-sqlite) | | `npm i database-js-sqlite` |
+| [ActiveX Data Objects](//github.com/mlaanderson/database-js-adodb) | *Windows only* | `npm i -D database-js-adodb` |
+| [CSV files](//github.com/mlaanderson/database-js-csv) | | `npm i -D database-js-csv` |
+| [Excel files](//github.com/mlaanderson/database-js-xlsx) | | `npm i -D database-js-xlsx` |
+| [Firebase](//github.com/mlaanderson/database-js-firebase) | | `npm i -D database-js-firebase` |
+| [INI files](//github.com/mlaanderson/database-js-ini) | | `npm i -D database-js-ini` |
+| [JSON files](//github.com/thiagodp/database-js-json) | | `npm i -D database-js-json` |
+| [MySQL](//github.com/mlaanderson/database-js-mysql) | | `npm i -D database-js-mysql` |
+| [MS SQL Server](https://github.com/thiagodp/database-js-mssql) | | `npm i -D database-js-mssql` |
+| [PostgreSQL](//github.com/mlaanderson/database-js-postgres) | | `npm i -D database-js-postgres` |
+| [SQLite](//github.com/mlaanderson/database-js-sqlite) | | `npm i -D database-js-sqlite` |
 
 See [database-js](https://github.com/mlaanderson/database-js) for the full list of available drivers.
 
 
-## Usage
+## Configure
 
 ### Configuration in CodeceptJS
 
@@ -49,33 +53,58 @@ In your `codecept.json`, include **DbHelper** in the property **helpers** :
   },
   ...
 ```
+
+## Usage
+
+
+### Syntax differences between CodeceptJS 2 and CodeceptJS 3
+
+In CodeceptJS 2, your callbacks receive an `I` argument:
+
+```javascript
+Scenario('test something', async ( I ) => {   // CodeceptJS 2 notation
+   /* ... */
+} );
+```
+
+In CodeceptJS 3, your callbacks receive an object with `I` - that is, `{ I }`:
+
+```javascript
+Scenario('test something', async ( { I } ) => {   // CodeceptJS 3 notation
+   /* ... */
+} );
+```
+
+See the [CodeceptJS docs](https://github.com/codeceptjs/CodeceptJS/wiki/Upgrading-to-CodeceptJS-3) for more information on how to upgrade your codebase.
+
 ### Examples
 
-The object `I` of your tests and events will have access to new methods. [See the API](#api).
+> The following examples are written with **CodeceptJS 3**.
+
+The object `I` of your tests and events now has to the [methods described in the API](#api).
 
 #### Example 1
 
 ```js
-BeforeSuite( async( I ) => {
+BeforeSuite( async( { I } ) => {
     // The first parameter is the key that will hold a reference to the db
     I.connect( "testdb", "mysql://root:mypassword@localhost:3306/testdb" );
 } );
 
-AfterSuite( async( I ) => {
+AfterSuite( async( { I } ) => {
     await I.removeConnection( "testdb" ); // also disconnects
 } );
 
 
-Before( async( I ) => {
+Before( async( { I } ) => {
 
-    // Delete all the records of the table user
-    await I.run( "testdb", "DELETE FROM user" );
+  // Deleting all the records from the table 'user'
+  await I.run( "testdb", "DELETE FROM user" );
 
-    // Insert some users
-    await I.run( "testdb", "INSERT INTO user ( username, password ) VALUES ( ?, ? )", "admin", "123456" );
-    await I.run( "testdb", "INSERT INTO user ( username, password ) VALUES ( ?, ? )", "bob", "654321" );
-await I.run( "testdb", "INSERT INTO user ( username, password ) VALUES ( ?, ? )", "alice", "4lic3p4s$" );
-
+  // Inserting some users
+  await I.run( "testdb", "INSERT INTO user ( username, password ) VALUES ( ?, ? )", "admin", "123456" );
+  await I.run( "testdb", "INSERT INTO user ( username, password ) VALUES ( ?, ? )", "bob", "654321" );
+  await I.run( "testdb", "INSERT INTO user ( username, password ) VALUES ( ?, ? )", "alice", "4lic3p4s$" );
 } );
 
 
@@ -89,9 +118,9 @@ await I.run( "testdb", "INSERT INTO user ( username, password ) VALUES ( ?, ? )"
 ```js
 Feature( 'Foo' );
 
-Scenario( 'Bar', async( I ) => {
+Scenario( 'Bar', async( { I } ) => {
 
-    // Query a user from the database
+    // Queries a user from the database
     const results = await I.query( "testdb", "SELECT * FROM user WHERE username = ?", "bob" );
     const bob = results[ 0 ];
 
