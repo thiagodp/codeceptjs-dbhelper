@@ -1,6 +1,6 @@
 {
   "name": "codeceptjs-dbhelper",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Database helper for CodeceptJS that uses database-js",
   "main": "index.js",
   "scripts": {
