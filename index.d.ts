@@ -1,28 +1,18 @@
-const dbjs = require('database-js');
-if ( ! Helper ) {
-    var Helper = require( 'codeceptjs/lib/helper' );
-}
-
+export = DbHelper;
 /**
  * Database helper for CodeceptJS
  *
  * @author Thiago Delgado Pinto
  */
-class DbHelper extends Helper {
-
+declare class DbHelper {
     /**
      * Constructor
      *
      * @param {object} config CodeceptJS configuration
      */
-    constructor( config ) {
-        super( config );
-        const defaultOptions = {};
-        // Attributes
-        this.options = Object.assign( defaultOptions, config ); // Copy from config
-        this.connectionMap = {};
-    }
-
+    constructor(config: object);
+    options: any;
+    connectionMap: {};
     /**
      * Connects to the database described by the given connection string.
      *
@@ -30,42 +20,19 @@ class DbHelper extends Helper {
      * @param {string|object}    conn   JDBC-like connection string or a connection object accepted by `database-js`.
      * @param {object|undefined} [driver] [OPTIONAL] Driver object, used by `database-js`.
      */
-    connect( key, conn, driver ) {
-        return this.connectionMap[ key ] = this.createConnection( conn, driver );
-    }
-
+    connect(key: string | number, conn: string | object, driver?: object | undefined): any;
     /**
      * Disconnects from the database identified by the given key.
      *
      * @param {string|number} key Database identification key set in connect()
      */
-    async disconnect( key ) {
-        let conn = this.connectionMap[ key ];
-        if ( ! conn ) {
-            throw this._keyNotFoundError( key );
-        }
-        return await conn.close();
-    }
-
+    disconnect(key: string | number): Promise<any>;
     /**
      * Disconnects and removes the database connection identified by the given key.
      *
      * @param {string|number} key Database identification key set in connect()
      */
-    async removeConnection( key ) {
-        if ( ! this.connectionMap[ key ] ) {
-            return true;
-        }
-        let couldClose = true;
-        try {
-            await this.disconnect( key );
-        } catch ( e ) {
-            couldClose = false;
-        }
-        this.connectionMap[ key ] = undefined;
-        return couldClose;
-    }
-
+    removeConnection(key: string | number): Promise<boolean>;
     /**
      * Performs a query.
      *
@@ -75,18 +42,7 @@ class DbHelper extends Helper {
      *
      * @returns {Promise<any[]>}      Query results.
      */
-    async query( key, command, ... params ) {
-        let conn = this.connectionMap[ key ];
-        if ( ! conn ) {
-            throw this._keyNotFoundError( key );
-        }
-        let stmt = conn.prepareStatement( command );
-        if ( ! params ) {
-            return await stmt.query();
-        }
-        return await stmt.query( ... params );
-    }
-
+    query(key: string | number, command: string, ...params: any[]): Promise<any[]>;
     /**
      * Executes a command.
      *
@@ -96,55 +52,30 @@ class DbHelper extends Helper {
      *
      * @returns {Promise<any[]>}      Command results.
      */
-    async run( key, command, ... params ) {
-        let conn = this.connectionMap[ key ];
-        if ( ! conn ) {
-            throw this._keyNotFoundError( key );
-        }
-        let stmt = conn.prepareStatement( command );
-        if ( ! params ) {
-            return await stmt.execute();
-        }
-        return await stmt.execute( ... params );
-    }
-
+    run(key: string | number, command: string, ...params: any[]): Promise<any[]>;
     /**
      * Creates a database connection.
      *
      * @param {string|object}       conn    JDBC-like connection string or a connection object accepted by `database-js`.
      * @param {object|undefined}    driver  [OPTIONAL] Driver object, used by `database-js`.
      */
-    createConnection( conn, driver ) {
-        return new dbjs.Connection( conn, driver );
-    }
-
+    createConnection(conn: string | object, driver: object | undefined): any;
     /**
      * Checks if there is a database connection with the given key.
      *
      * @param {string|number} key Database identification key set in connect()
      */
-    hasConnection( key ) {
-        return !! this.connectionMap[ key ];
-    }
-
+    hasConnection(key: string | number): boolean;
     /**
      * Gets the database connection with the given key.
      *
      * @param {string|number} key Database identification key set in connect()
      */
-    getConnection( key ) {
-        return this.connectionMap[ key ];
-    }
-
+    getConnection(key: string | number): any;
     /**
      * Creates an error that represents a database not found.
      *
      * @param {string|number} key Database identification key
      */
-    _keyNotFoundError( key ) {
-        return new Error( 'Database not found with the key ' + key );
-    }
-
+    _keyNotFoundError(key: string | number): Error;
 }
-
-module.exports = DbHelper;
