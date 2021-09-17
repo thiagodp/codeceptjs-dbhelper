@@ -1,6 +1,6 @@
 {
   "name": "codeceptjs-dbhelper",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Database helper for CodeceptJS that uses database-js",
   "homepage": "https://github.com/thiagodp/codeceptjs-dbhelper",
   "author": "thiagodp",
@@ -25,7 +25,8 @@
     "test:v2": "cd codeceptjs_check/v2 && npx codeceptjs run",
     "test:v3": "cd codeceptjs_check/v3 && npx codeceptjs run",
     "test:all": "npm run test && npm run test:v2 && npm run test:v3",
-    "preversion": "npm run test"
+    "doc": "tsc index.js --declaration --allowJs --emitDeclarationOnly",
+    "preversion": "npm run doc && npm run test"
   },
   "dependencies": {
     "database-js": "^3.0.11"
@@ -33,6 +34,7 @@
   "devDependencies": {
     "codeceptjs": "^3.1.2",
     "database-js-sqlite": "^1.3.0",
-    "mocha": "^8.4.0"
+    "mocha": "^8.4.0",
+    "typescript": "^4.4.3"
   }
 }
