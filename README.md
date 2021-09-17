@@ -1,11 +1,11 @@
 # codeceptjs-dbhelper
 
-[![npm version](https://badge.fury.io/js/codeceptjs-dbhelper.svg)](https://badge.fury.io/js/codeceptjs-dbhelper)
-[![Downloads](https://img.shields.io/npm/dt/codeceptjs-dbhelper.svg)](https://npmjs.org/package/codeceptjs-dbhelper)
+[![npm version](https://img.shields.io/npm/v/codeceptjs-dbhelper.svg?color=green&label=NPM&style=for-the-badge)](https://badge.fury.io/js/codeceptjs-dbhelper)
+[![Downloads](https://img.shields.io/npm/dt/codeceptjs-dbhelper.svg?style=for-the-badge)](https://npmjs.org/package/codeceptjs-dbhelper)
 
 > Let your CodeceptJS tests talk to databases
 
-This is a [Helper](https://codecept.io/helpers/) for [CodeceptJS](https://codecept.io/) that allows you to execute queries or commands to databases using [database-js](https://github.com/mlaanderson/database-js). That is, your tests written for CodeceptJS now will be able to access databases easily. **It is especially useful for preparing databases before/after executing test cases.**
+This is a [Helper](https://codecept.io/helpers/) for [CodeceptJS](https://codecept.io/) that allows you to execute database queries and commands using [database-js](https://github.com/mlaanderson/database-js).
 
 👉 It works with **CodeceptJS 1, 2, and 3**.
 
@@ -57,7 +57,7 @@ In your CodeceptJS configuration file (e.g., `codecept.conf.js`, `codecept.json`
 
 ### Syntax differences between CodeceptJS 2 and CodeceptJS 3
 
-In CodeceptJS 2, your callbacks receive `I` as argument:
+In CodeceptJS 2, every callback receives `I` as an argument:
 
 ```javascript
 Scenario('test something', async ( I ) => {   // CodeceptJS 2 notation
@@ -65,7 +65,7 @@ Scenario('test something', async ( I ) => {   // CodeceptJS 2 notation
 } );
 ```
 
-In CodeceptJS 3, your callbacks receive an object with `I` - that is, `{ I }`:
+In CodeceptJS 3, every callback receives an **object** that contains the property `I` - that is, `{ I }`:
 
 ```javascript
 Scenario('test something', async ( { I } ) => {   // CodeceptJS 3 notation
@@ -75,11 +75,9 @@ Scenario('test something', async ( { I } ) => {   // CodeceptJS 3 notation
 
 See the [CodeceptJS docs](https://github.com/codeceptjs/CodeceptJS/wiki/Upgrading-to-CodeceptJS-3) for more information on how to upgrade your codebase.
 
-### Examples
+### Usage
 
 > The following examples are written with **CodeceptJS 3**.
-
-Now the object `I` (of your callbacks) has [new methods](#api).
 
 #### Example 1
 
@@ -134,52 +132,78 @@ Scenario( 'Bar', async( { I } ) => {
 
 ## API
 
-
-```js
-/**
- * Connects to the database described by the given connection string.
- *
- * @param {string|number}    key    Identification for using in other commands.
- * @param {string|object}    conn   JDBC-like connection string or a connection object accepted by `database-js`.
- * @param {object|undefined} driver [OPTIONAL] Driver object, used by `database-js`.
- */
-connect( key, conn, driver );
-
-/**
- * Disconnects from the database identified by the given key.
- *
- * @param {string|number} key Database identification key set in connect()
- */
-async disconnect( key );
-
-/**
- * Disconnects and removes the database connection identified by the given key.
- *
- * @param {string|number} key Database identification key set in connect()
- */
-async removeConnection( key );
-
-/**
- * Performs a query.
- *
- * @param {string|number} key     Database identification key set in connect()
- * @param {string}        command Query to run.
- * @param {any[]}         params  [OPTIONAL] Query parameters
- *
- * @returns {Promise<any[]>}      Query results.
- */
-async query( key, command, ... params );
-
-/**
- * Executes a command.
- *
- * @param {string|number} key     Database identification key set in connect()
- * @param {string}        command Command to run.
- * @param {any[]}         params  [OPTIONAL] Command parameters
- *
- * @returns {Promise<any[]>}      Command results.
- */
-async run( key, command, ... params );
+```ts
+    /**
+     * Connects to the database described by the given connection string.
+     *
+     * @param {string|number}    key         Identification for using in other commands.
+     * @param {string|object}    conn        JDBC-like connection string or a connection object accepted by `database-js`.
+     * @param {object|undefined} [driver]    [OPTIONAL] Driver object, used by `database-js`.
+     *
+     * @returns {Connection} DatabaseJS' connection
+     */
+    connect(key: string | number, conn: string | object, driver?: object | undefined): any;
+    /**
+     * Disconnects and removes the database connection identified by the given key.
+     *
+     * @param {string|number} key Database identification key set in connect().
+     *
+     * @returns {Promise<boolean>} If it was successful.
+     */
+    disconnect(key: string | number): Promise<boolean>;
+    /**
+     * Disconnects and removes the database connection identified by the given key.
+     *
+     * @param {string|number} key Database identification key set in connect().
+     *
+     * @returns {Promise<boolean>} If it was successful.
+     */
+    removeConnection(key: string | number): Promise<boolean>;
+    /**
+     * Performs a query.
+     *
+     * @param {string|number}      key       Database identification key set in connect().
+     * @param {string}             command   Query to run.
+     * @param {...any[]|undefined} [params]  [OPTIONAL] Query parameters.
+     *
+     * @returns {Promise<any[]>} Query results.
+     */
+    query(key: string | number, command: string, ...params?: (any[] | undefined)[]): Promise<any[]>;
+    /**
+     * Executes a command.
+     *
+     * @param {string|number} key       Database identification key set in connect().
+     * @param {string}        command   Command to run.
+     * @param {any[]}         [params]  [OPTIONAL] Command parameters.
+     *
+     * @returns {Promise<any[]>} Command results.
+     */
+    run(key: string | number, command: string, ...params?: any[]): Promise<any[]>;
+    /**
+     * Creates a database connection.
+     *
+     * @param {string|object}       conn     JDBC-like connection string or a connection object accepted by `database-js`.
+     * @param {object|undefined}    [driver] [OPTIONAL] Driver object, used by `database-js`.
+     *
+     * @returns {Connection} DatabaseJS' connection
+     */
+    createConnection(conn: string | object, driver?: object | undefined): any;
+    /**
+     * Checks if there is a database connection with the given key.
+     *
+     * @param {string|number} key Database identification key set in connect().
+     *
+     * @returns {boolean}
+     */
+    hasConnection(key: string | number): boolean;
+    /**
+     * Gets the database connection with the given key.
+     *
+     * @param {string|number} key Database identification key set in connect().
+     *
+     * @returns {Connection} DatabaseJS' connection.
+     */
+    getConnection(key: string | number): any;
 ```
 
 ## See also
